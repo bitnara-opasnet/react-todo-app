@@ -52,7 +52,7 @@ const Btn = styled.button`
 `;
 
 const Select = styled.select`
-    width: 90%;
+    width: 100%;
     height: 40px;
     padding: 0 20px;
     border: none;
@@ -89,21 +89,25 @@ function ToDoList() {
     const [categories, setCategories] = useRecoilState(categoriesState);
     const { register, handleSubmit, setValue } = useForm<ICategoryForm>();
     const handleValid = ({ item }: ICategoryForm) => {
-        setCategories((currVal) => { 
+        setCategories((currVal) => {
             return {...currVal as any, [item]:item};
         })
         setValue("item", "");
     };
-    console.log(categories)
     localStorage.setItem("categories", JSON.stringify(categories));
+
     return (
         <Container>
             <Title>일정관리</Title>
             <SelectContainer>
                 <Select value={category} onInput={onInput}>
-                    <option value={Categories.TO_DO}>{Categories.TO_DO}</option>
+                    {Object.entries(categories).map(function([key, value]){
+                        return <option key={key} value={value}>{value}</option>
+                    })}
+
+                    {/* <option value={Categories.TO_DO}>{Categories.TO_DO}</option>
                     <option value={Categories.DOING}>{Categories.DOING}</option>
-                    <option value={Categories.DONE}>{Categories.DONE}</option>
+                    <option value={Categories.DONE}>{Categories.DONE}</option> */}
                 </Select>
             </SelectContainer>
             <Form onSubmit={handleSubmit(handleValid)}>

@@ -1,6 +1,6 @@
-import { useSetRecoilState } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import styled from "styled-components";
-import { Categories, IToDo, toDoState } from "../atoms";
+import { Categories, categoriesState, IToDo, toDoState } from "../atoms";
 
 const Li = styled.li`
     display: flex;
@@ -39,20 +39,26 @@ function ToDo({text, category, id}:IToDo) {
         setToDos((oldToDos) => {
         return oldToDos.filter((toDo) => toDo.id !== id);
     })};
+    const categories = useRecoilValue(categoriesState);
 
     return (
         <Li>
             <span>{text}</span>
             <BtnContainer>
-                {category !== Categories.TO_DO && (
+                {/* {category !== Categories.TO_DO && (
                     <button name={Categories.TO_DO} onClick={onClick}>{Categories.TO_DO}</button>
-                )}
+                    )}
                 {category !== Categories.DOING && (
                     <button name={Categories.DOING} onClick={onClick}>{Categories.DOING}</button>
-                )}
+                    )}
                 {category !== Categories.DONE && (
                     <button name={Categories.DONE} onClick={onClick}>{Categories.DONE}</button>
-                )}
+                    )} */}
+
+                {Object.entries(categories).map(function([key, value]){
+                    return value !== category ? <button key={key} name={value} onClick={onClick}>{value}</button> : (null)
+                    // return <button key={key} name={value} onClick={onClick}>{value}</button>;
+                })}
                 <button onClick={onDelete}>삭제</button>
             </BtnContainer>
         </Li>
